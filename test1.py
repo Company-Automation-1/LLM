@@ -16,7 +16,31 @@ def vector_power(vector, max_power):
     return (vector ** powers).T  # 转置后形状 (max_power, n)
 
 def propagate(vector, weights, activation_weight, biases):
-    """计算向量在权重矩阵下的传播结果"""
+    """
+    计算向量在权重矩阵下的非线性传播结果
+    
+    参数:
+        vector: numpy.ndarray, 形状为(n,1)的输入列向量
+        weights: numpy.ndarray, 形状为(m,n)的权重矩阵，用于线性变换
+        activation_weight: numpy.ndarray, 形状为(m,k)的激活权重矩阵，用于非线性变换
+        biases: numpy.ndarray, 形状为(m,1)的偏置向量
+    
+    返回:
+        numpy.ndarray, 形状为(m,1)的输出向量
+    
+    计算过程:
+        1. 先进行线性变换: z = weights @ vector + biases
+        2. 对z进行幂次扩展: 生成形状为(k,m)的幂次矩阵
+        3. 对每个输出维度计算加权和: output[i] = sum(activation_weight[i,:] * power_matrix[:,i])
+    
+    示例:
+        - vector = np.array([[1,2,3]]).T
+        - weights = np.array([[2,2,1],[2,2,1],[1,1,1],[4,4,4]])
+        - activation_weight = np.array([[4,3,5],[2,1,2],[1,2,6],[3,2,4]])
+        - biases = np.array([[2,2,1,3]]).T
+        - propagate(vector, weights, activation_weight, biases)
+        >>>  返回各神经元的激活值组成的列向量
+    """
 
     max_power = activation_weight.shape[1]
 

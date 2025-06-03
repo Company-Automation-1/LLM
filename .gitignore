@@ -5,3 +5,4 @@ img/
 data/
 mnist_cnn.pth
 __pycache__/
+output/
