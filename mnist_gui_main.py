@@ -29,12 +29,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.paintBoard.show()
         
         # 连接按钮信号
-        self.pbtPredict.clicked.connect(self.pbtPredict_Callback)
         self.pbtClear.clicked.connect(self.pbtClear_Callback)
         self.pbtPredict_2.clicked.connect(self.submit_correct_result)
         
         # 初始化界面
-        self.clear_data_area()
+        self.pbtClear_Callback()
         self.lbResult.setText("")
         self.lbCofidence.setText("")
 
@@ -46,14 +45,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.move(frame_pos.topLeft())
 
     def pbtClear_Callback(self):
-        """清空画板内容"""
+        """清空画板和结果显示"""
         self.paintBoard.Clear()
         self.lbResult.setText("")
         self.lbCofidence.setText("")
-
-    def clear_data_area(self):
-        """清空画板内容"""
-        self.paintBoard.Clear()
 
     def pbtPredict_Callback(self):
         """识别按钮回调函数"""
@@ -78,10 +73,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def save_paintboard_image(self):
         """将画板内容保存为28x28 PNG图片，并输出归一化数组"""
-        qimg = self.paintBoard.getContentAsQImage()
+        __img = self.paintBoard.getContentAsQImage()
+        # 判断画板是否为空（全白）
+        if __img is None or __img.isNull() or __img == __img.copy().fill(255):
+            print("画板为空，不保存图片")
+            return None
         buffer = QBuffer()
         buffer.open(QIODevice.ReadWrite)
-        qimg.save(buffer, "PNG")
+        __img.save(buffer, "PNG")
         pil_img = Image.open(io.BytesIO(buffer.data()))
 
         pil_img = pil_img.resize((28, 28), Image.LANCZOS)  # 缩放
