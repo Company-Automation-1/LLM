@@ -1,25 +1,25 @@
 import numpy as np
 
-# 激活函数 - 根据指定的幂次对输入值进行变换
-def power(value, degree):
+#TODO: 激活函数
+def functions(value, degree):
     if degree == 0:
         return value  # 0次幂返回原值
     else:
         return value ** degree  # 非0次幂返回幂次计算结果
 
-# 生成激活范德蒙德矩阵
-def vandermonde_matrix(vector, max_power, power):
+#TODO: Vandermonde矩陣
+def vector_power(vector, max_power):
     """
-    生成激活范德蒙德矩阵
+    生成范德蒙德矩阵
     
     参数:
         vector: 输入向量 (一维数组或可转换为向量的结构)
         max_power: 矩阵的最高幂次
-        power: 激活函数 
-    
-    返回:
-        转置后的激活范德蒙德矩阵 (形状: max_power × n)
+        
+        返回:
+        范德蒙德矩阵 (形状: n × (max_power+1))
     """
+    
     # 确保输入是一维数组
     vector_1d = np.asarray(vector).flatten()
     
@@ -28,20 +28,35 @@ def vandermonde_matrix(vector, max_power, power):
     vandermonde = np.vander(vector_1d, N=max_power+1, increasing=True)
     
     # 移除全为1的0次幂列（第一列）
-    vandermonde = vandermonde[:, 1:]
-    print(f"vandermonde:\n{vandermonde}")
+    output = vandermonde[:, 1:]
+    # print(f"output:\n{output}")
+
+    return output
+
+#TODO: 生成激活范德蒙德矩阵
+def vandermonde_matrix(vector, functions):
+    """
+    生成激活范德蒙德矩阵
+    
+    参数:
+        vector: 范德蒙德矩阵 (形状: n × (max_power+1))
+        functions: 激活函数 
+    
+    返回:
+        转置后的激活范德蒙德矩阵 (形状: max_power × n)
+    """
     # 对矩阵的每个元素应用激活函数
-    rows, cols = vandermonde.shape
-    power_vandermonde = np.zeros_like(vandermonde)
+    rows, cols = vector.shape
+    power_vandermonde = np.zeros_like(vector)
     for i in range(rows):
         for j in range(cols):
             # print(f"i={i}, j={j}, vandermonde[i, j]={vandermonde[i, j]}")
             # j从0开始对应1次幂，j+1才是当前元素的幂次
-            power_vandermonde[i, j] = power(vandermonde[i, j], j+1)
-    print(f"power_vandermonde:\n{power_vandermonde}")
+            power_vandermonde[i, j] = functions(vector[i, j], j+1)
+    # print(f"power_vandermonde:\n{power_vandermonde}")
     return power_vandermonde.T  # 返回转置矩阵
 
-# 矩阵对角元素乘积求和
+#TODO: 矩阵对角元素乘积求和
 def diagonal_product(matrix_1, matrix_2):
     """
     计算两个矩阵的对角元素乘积之和
@@ -77,7 +92,7 @@ def diagonal_product(matrix_1, matrix_2):
     
     return result
 
-# Propagate函數
+#TODO: Propagate函数
 def propagate(vector, weights, activation_weights, biases):
     """
     执行单层神经网络前向传播
@@ -101,16 +116,19 @@ def propagate(vector, weights, activation_weights, biases):
     
     # 确定激活函数的最高次幂（基于activation_weights的列数）
     max_power = activation_weights.shape[1]
+
+    vector = vector_power(intermediate_vector, max_power)  # 生成范德蒙德矩阵
+    # print(f"vandermonde:\n{vandermonde}")
     
     # 生成激活后的范德蒙德矩阵
-    activated_vector = vandermonde_matrix(intermediate_vector, max_power, power)
+    activated_vector = vandermonde_matrix(vector, functions)
     
     # 计算对角乘积
     result = diagonal_product(activation_weights, activated_vector)
     
     return result
 
-# Softmax函数
+#TODO: Softmax函数
 def softmax(x, temperature=1):
     """
     带温度参数的Softmax函数
@@ -128,7 +146,7 @@ def softmax(x, temperature=1):
     exp_x = np.exp(scaled_x)
     return exp_x / np.sum(exp_x)  # 归一化
 
-# 損失函數 (平方损失函数)
+#TODO: 损失函数 (平方损失函数)
 def quadratic_loss_function(prediction, actual):
     """
     平方损失函数
@@ -140,8 +158,8 @@ def quadratic_loss_function(prediction, actual):
     """
     return np.sum((prediction - actual) ** 2)
 
-# 神经网络前向传播
-def Neural_Network(vector, weights, activation_weights, biases, temperature):
+#TODO: 神经网络
+def neural_network(vector, weights, activation_weights, biases, temperature):
     """
     多层神经网络前向传播
     
