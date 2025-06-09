@@ -28,7 +28,7 @@ class Ui_MainWindow(object):
         self.lbDataArea = QtWidgets.QLabel(MainWindow)
         self.lbDataArea.setGeometry(QtCore.QRect(510, 210, 224, 224))
         self.lbDataArea.setMouseTracking(False)
-        self.lbDataArea.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.lbDataArea.setStyleSheet("background-color: rgb(0, 0, 0);")
         self.lbDataArea.setFrameShape(QtWidgets.QFrame.Box)
         self.lbDataArea.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.lbDataArea.setLineWidth(4)

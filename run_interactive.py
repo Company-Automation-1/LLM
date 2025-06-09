@@ -1,5 +1,9 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
+
+import sys
+from PyQt5.QtWidgets import QApplication
+from mnist_gui_main import MainWindow
 
 """
 交互式手写数字识别启动脚本
@@ -7,4 +11,7 @@
 """
 
 if __name__ == "__main__":
-    print("正在启动交互式手写数字识别系统...")
+    app = QApplication(sys.argv)
+    gui = MainWindow()
+    gui.show()
+    sys.exit(app.exec_())

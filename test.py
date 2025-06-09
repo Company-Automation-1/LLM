@@ -1,12 +1,17 @@
 import numpy as np
 
+# Vandermonde矩陣
 def vector_power(vector, max_power):
     vector = np.asarray(vector).reshape(-1, 1)
     powers = np.arange(1, max_power + 1)
     return (vector ** powers).T
 
+# Propagate函數
 def propagate(vector, weights, activation_weight, biases):
     max_power = activation_weight.shape[1]
+    print(f"max_power: {max_power}")
+    print(f"vector:\n{vector}\nweights:\n{weights}\nactivation_weight:\n{activation_weight}\nbiases:\n{biases}")
+    print(weights @ vector + biases)
     vandermonde_matrix = vector_power(weights @ vector + biases, max_power)
     
     output_vector = np.array([])
@@ -15,16 +20,19 @@ def propagate(vector, weights, activation_weight, biases):
      
     return output_vector
 
-def softmax(x, temperature=0.7):
+# Softmax函數
+def softmax(x, temperature=1):
     max_x = np.max(x)
     y = np.exp((x - max_x) / temperature)
     f_x = y / np.sum(y)
     return f_x
 
+# 神經網絡
 def neural_network(input_vector, weights, activation_weights, biases): 
     vector = propagate(input_vector, weights, activation_weights, biases)
     output_vector = softmax(vector)
     return output_vector
+
 
 def test_neural_network():
     """
@@ -40,7 +48,7 @@ def test_neural_network():
     output_vector = neural_network(input_vector, weights, activation_weights, biases)
 
     # 3. 打印输出结果
-    print(output_vector)
+    # print(output_vector)
     
     # [[0.]
     #  [0.]
