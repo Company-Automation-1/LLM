@@ -6,3 +6,7 @@ data/
 mnist_cnn.pth
 __pycache__/
 output/
+*.pkl
+*.pth
+*.sh
+*.gz

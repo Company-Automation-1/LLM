@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'layout.ui'
+# Form implementation generated from reading ui file '.\qt\layout.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -28,7 +28,7 @@ class Ui_MainWindow(object):
         self.lbDataArea = QtWidgets.QLabel(MainWindow)
         self.lbDataArea.setGeometry(QtCore.QRect(510, 210, 224, 224))
         self.lbDataArea.setMouseTracking(False)
-        self.lbDataArea.setStyleSheet("background-color: rgb(0, 0, 0);")
+        self.lbDataArea.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.lbDataArea.setFrameShape(QtWidgets.QFrame.Box)
         self.lbDataArea.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.lbDataArea.setLineWidth(4)
@@ -54,25 +54,22 @@ class Ui_MainWindow(object):
         font.setPointSize(48)
         self.lbResult.setFont(font)
         self.lbResult.setObjectName("lbResult")
-        self.lbCofidence = QtWidgets.QLabel(MainWindow)
-        self.lbCofidence.setGeometry(QtCore.QRect(330, 200, 151, 21))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.lbCofidence.setFont(font)
-        self.lbCofidence.setObjectName("lbCofidence")
         self.pbtPredict_2 = QtWidgets.QPushButton(MainWindow)
         self.pbtPredict_2.setGeometry(QtCore.QRect(50, 390, 120, 30))
         self.pbtPredict_2.setStyleSheet("")
         self.pbtPredict_2.setObjectName("pbtPredict_2")
         self.lineEdit = QtWidgets.QLineEdit(MainWindow)
-        self.lineEdit.setGeometry(QtCore.QRect(330, 420, 161, 31))
+        self.lineEdit.setGeometry(QtCore.QRect(330, 315, 161, 31))
         self.lineEdit.setObjectName("lineEdit")
         self.lbCofidence_2 = QtWidgets.QLabel(MainWindow)
-        self.lbCofidence_2.setGeometry(QtCore.QRect(330, 320, 151, 21))
+        self.lbCofidence_2.setGeometry(QtCore.QRect(330, 200, 151, 21))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.lbCofidence_2.setFont(font)
         self.lbCofidence_2.setObjectName("lbCofidence_2")
+        self.lineEdit_2 = QtWidgets.QLineEdit(MainWindow)
+        self.lineEdit_2.setGeometry(QtCore.QRect(330, 420, 161, 31))
+        self.lineEdit_2.setObjectName("lineEdit_2")
 
         self.retranslateUi(MainWindow)
         self.pbtClear.clicked.connect(MainWindow.pbtClear_Callback) # type: ignore
@@ -84,9 +81,9 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "手写数字识别GUI-v1.0 --by hamlin"))
         self.pbtClear.setText(_translate("MainWindow", "清除数据"))
         self.pbtPredict.setText(_translate("MainWindow", "识别"))
-        self.label_3.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt; font-weight:600;\">识别结果：</span></p><p><br/><br/></p><p><span style=\" font-size:12pt; font-weight:600;\">Softmax：</span></p><p><br/><br/></p><p><span style=\" font-size:12pt; font-weight:600;\">Loss：</span></p><p><br/><br/></p><p><span style=\" font-size:12pt; font-weight:600;\">正确结果：</span></p></body></html>"))
+        self.label_3.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt; font-weight:600;\">识别结果：</span></p><p><br/><br/></p><p><span style=\" font-size:12pt; font-weight:600;\">Loss：</span></p><p><br/><br/></p><p><span style=\" font-size:12pt; font-weight:600;\">正确结果：</span></p><p><br/><br/></p><p><span style=\" font-size:12pt; font-weight:600;\">学习率：</span></p></body></html>"))
         self.label_4.setText(_translate("MainWindow", "数据输入区域"))
         self.lbResult.setText(_translate("MainWindow", "9"))
-        self.lbCofidence.setText(_translate("MainWindow", "0.99999999"))
         self.pbtPredict_2.setText(_translate("MainWindow", "提交正确结果"))
         self.lbCofidence_2.setText(_translate("MainWindow", "0.99999999"))
+        self.lineEdit_2.setText(_translate("MainWindow", "0.1"))

@@ -44,7 +44,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # 初始化界面
         self.pbtClear_Callback()
         self.lbResult.setText("")
-        self.lbCofidence.setText("")
         self.lbCofidence_2.setText("")
 
     def _center_window(self):
@@ -58,15 +57,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """清空画板和结果显示"""
         self.paintBoard.Clear()
         self.lbResult.setText("")
-        self.lbCofidence.setText("")
         self.lbCofidence_2.setText("")
 
     def pbtPredict_Callback(self):
         """识别按钮回调函数"""
         img_array = self.save_paintboard_image()
         if img_array is None:
-            self.lbResult.setText("")
-            self.lbCofidence.setText("")
             self.lbCofidence_2.setText("")
             return
         # 数据格式转换：取出图片数据，展平成(784, 1)向量
@@ -90,14 +86,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         print(loss)
         # 更新UI显示
         self.lbResult.setText(str(pred))
-        self.lbCofidence.setText(f"{confidence:.8f}")
         self.lbCofidence_2.setText(f"{loss:.6f}")
 
     def submit_correct_result(self):
         """提交正确结果按钮回调函数"""
         correct_result = self.lineEdit.text()
+        learning_rate = float(self.lineEdit_2.text())
+
         if correct_result:
             print(f"用户提交的正确结果: {correct_result}")
+            print(f"学习率: {learning_rate}")
             # 这里可以添加保存正确结果的逻辑
         else:
             print("请输入正确结果")

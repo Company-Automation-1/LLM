@@ -1,11 +1,11 @@
 import numpy as np
 from main_Lib_1 import power, vandermonde_matrix, diagonal_product, propagate, softmax, neural_network
 from main_Lib_2 import softplus, sigmoid
-# from trainer_test_2 import diff_vect_aweight
-# from trainer_test_3 import diff_vect_bias
+from trainer_test_1 import diff_vect_weight
+from trainer_test_2 import diff_vect_aweight
 
-def diff_vect_weight(vectors, intermediate_vectors, weights, activation_weights, diff_activation, k, l, i, j):
-    
+def diff_vect_bias(vectors, intermediate_vectors, weights, activation_weights, diff_activation, k, l, j):
+
    k = k - 1
    l = l - 1
    i = i - 1
@@ -16,19 +16,21 @@ def diff_vect_weight(vectors, intermediate_vectors, weights, activation_weights,
    diff_activation_vector = vandermonde_matrix(intermediate_vectors[l], diff_activation, degree)
 
    vector_2 = diagonal_product(activation_weights[l], diff_activation_vector)
-
+   
+   
    if k == l + 1:
+
       vector_1 = np.zeros_like(vectors[k].T)
+       
+      vector_1[j] = vector_2[j]
 
-      vector_1[i] = vectors[l][j]
-
-
-      output = diagonal_product(vector_2, vector_1)
-    
+      output = vector_1
+       
    else:
-        
-      output = vector_2 * (weights[l] @ diff_vect_weight(vectors, intermediate_vectors, weights, activation_weights, diff_activation, k - 1, l, i, j))
+       
 
+      output = vector_2 * (weights[l] @ diff_vect_bias(vectors, intermediate_vectors, weights, activation_weights, diff_activation, k - 1, l, j))
+       
    return output
 
 if __name__ == '__main__':
@@ -83,6 +85,6 @@ if __name__ == '__main__':
    activation_weights = [activation_weight_1, activation_weight_2]
 
 
-   result = diff_vect_weight(vectors, intermediate_vectors, weights, activation_weights, softplus, 3, 1, 1, 1)
+   result = diff_vect_aweight(vectors, intermediate_vectors, weights, activation_weights, softplus, 3, 1, 1, 1)
 
    print(result)

@@ -1,23 +1,22 @@
 import numpy as np
+from typing import Callable, List, Union, Tuple
 
 #TODO: 模板函数
-def power(value, degree):
+def power(value: np.ndarray, degree: int) -> np.ndarray:
     return value ** degree  # 非0次幂返回幂次计算结果
 
 #TODO: 生成激活范德蒙德矩阵
-def vandermonde_matrix(vector, function, degree):
+def vandermonde_matrix(vector: np.ndarray, function: Callable[[np.ndarray, int], np.ndarray], degree: int) -> np.ndarray:
     
     matrix = vector
-
+    
     for i in range(degree):
         matrix = np.append(matrix, function(vector, i+1), axis=1)
     
-    return matrix
+    return matrix.T  # 转置
 
 #TODO: 矩阵对角元素乘积求和
-def diagonal_product(matrix_1, matrix_2):
-
-    print(f"matrix_1:\n{matrix_1}\nmatrix_2:\n{matrix_2}")
+def diagonal_product(matrix_1: np.ndarray, matrix_2: np.ndarray) -> np.ndarray:
 
     matrix_1 = np.array(matrix_1)
     matrix_2 = np.array(matrix_2)
@@ -40,7 +39,8 @@ def diagonal_product(matrix_1, matrix_2):
     return result
 
 #TODO: Propagate函数
-def propagate(vector, weights, activation_weights, biases, activation_function):
+def propagate(vector: np.ndarray, weights: np.ndarray, activation_weights: np.ndarray, 
+              biases: np.ndarray, activation_function: Callable[[np.ndarray, int], np.ndarray]) -> np.ndarray:
 
     # 计算线性变换
     intermediate_vector = weights @ vector + biases
@@ -57,7 +57,7 @@ def propagate(vector, weights, activation_weights, biases, activation_function):
     return result
 
 #TODO: Softmax函数
-def softmax(x, temperature=1):
+def softmax(x: np.ndarray, temperature: float = 1) -> np.ndarray:
 
     # 数值稳定处理 - 减去最大值防止指数溢出
     max_x = np.max(x)
@@ -66,7 +66,12 @@ def softmax(x, temperature=1):
     return exp_x / np.sum(exp_x)  # 归一化
 
 #TODO: 神经网络
-def neural_network(vector, weights, activation_weights, biases, activation_function, temperature):
+def neural_network(vector: np.ndarray, 
+                  weights: List[np.ndarray], 
+                  activation_weights: List[np.ndarray], 
+                  biases: List[np.ndarray], 
+                  activation_function: Callable[[np.ndarray, int], np.ndarray], 
+                  temperature: float) -> np.ndarray:
     """
         vector: 输入向量 (列向量)
         weights: 权重矩阵列表 (每层一个)
