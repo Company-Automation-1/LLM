@@ -1,33 +1,36 @@
 import numpy as np
 from main_Lib_1 import power, vandermonde_matrix, diagonal_product, propagate, softmax, neural_network
 from main_Lib_2 import softplus, sigmoid
-# from trainer_test_2 import diff_vect_aweight
-# from trainer_test_3 import diff_vect_bias
 
 def diff_vect_weight(vectors, intermediate_vectors, weights, activation_weights, diff_activation, k, l, i, j):
-    
+
    k = k - 1
    l = l - 1
    i = i - 1
    j = j - 1
 
-   degree = activation_weights[l].shape[1] - 1
+   degree = activation_weights[k - 1].shape[1] - 1
 
-   diff_activation_vector = vandermonde_matrix(intermediate_vectors[l], diff_activation, degree)
+   diff_activation_vector = vandermonde_matrix(intermediate_vectors[k - 1], diff_activation, degree)
 
-   vector_2 = diagonal_product(activation_weights[l], diff_activation_vector)
+   vector_2 = diagonal_product(activation_weights[k - 1], diff_activation_vector)
 
    if k == l + 1:
-      vector_1 = np.zeros_like(vectors[k].T)
+
+      vector_1 = np.zeros_like(vectors[k])
 
       vector_1[i] = vectors[l][j]
 
+      output = vector_2 * vector_1
 
-      output = diagonal_product(vector_2, vector_1)
-    
    else:
-        
-      output = vector_2 * (weights[l] @ diff_vect_weight(vectors, intermediate_vectors, weights, activation_weights, diff_activation, k - 1, l, i, j))
+      b = diff_vect_weight(vectors, intermediate_vectors, weights, activation_weights, diff_activation, k, l + 1, i + 1, j + 1)
+
+      a = weights[k - 1]
+
+      c = a @ b
+
+      output = vector_2 * c
 
    return output
 
@@ -77,12 +80,11 @@ if __name__ == '__main__':
       [1, 2]
    ])
 
-   vectors = [vector_1, vector_2, vector_3]
-   intermediate_vectors = [intermediate_vector_1, intermediate_vector_2]
-   weights = [weight_1, weight_2]
-   activation_weights = [activation_weight_1, activation_weight_2]
+   vectors = [vector_3, vector_2, vector_1]
+   intermediate_vectors = [intermediate_vector_2, intermediate_vector_1]
+   weights = [weight_2, weight_1]
+   activation_weights = [activation_weight_2, activation_weight_1]
 
-
-   result = diff_vect_weight(vectors, intermediate_vectors, weights, activation_weights, softplus, 3, 1, 1, 1)
+   result = diff_vect_weight(vectors, intermediate_vectors, weights, activation_weights, softplus, 3, 1, 1, 2)
 
    print(result)
