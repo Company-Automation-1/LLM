@@ -1,79 +1,56 @@
-# 幂激活神经网络手写数字识别系统
+# 《深度学习入门-基于Python的理论与实现》
 
-这是一个基于幂激活函数的神经网络实现的手写数字识别系统。该系统使用Python和PyQt5构建，支持通过图形界面进行手写数字输入和识别，并支持用户反馈学习功能。
+## 项目结构
 
-## 特点
+项目已按功能模块重新组织，目录结构如下：
 
-- 创新的幂激活函数神经网络结构
-- 支持手写输入和识别
-- 用户反馈学习功能，可以不断优化模型
-- 模型参数的保存和加载
-- 训练过程可视化
-
-## 系统要求
-
-- Python 3.6+
-- PyQt5
-- NumPy
-- Matplotlib
-- Pillow
-
-## 安装
-
-1. 克隆仓库或下载源代码
-
-2. 安装依赖
-```bash
-pip install -r requirements.txt
+```
+src/
+├── activations/              # 激活函数相关模块
+│   ├── activation_functions.py  # 包含softplus和sigmoid等激活函数
+│   └── __init__.py
+├── gui/                      # 图形界面相关模块
+│   └── main.py               # GUI主程序
+├── models/                   # 模型保存和加载相关模块
+│   ├── model_io.py           # 模型IO操作函数
+│   ├── model_test.py         # 模型测试函数
+│   └── __init__.py
+├── networks/                 # 神经网络核心功能模块
+│   ├── core.py               # 网络核心函数
+│   └── __init__.py
+├── trainers/                 # 训练器相关模块
+│   ├── backprop.py           # 反向传播实现
+│   └── __init__.py
+├── utils/                    # 通用工具函数
+│   ├── print_utils.py        # 打印工具函数
+│   └── __init__.py
+├── run_test.py               # 测试运行脚本
+└── __init__.py
 ```
 
-## 使用方法
+## 模块说明
 
-### 运行图形界面
+- **activations**: 激活函数模块，包含各种激活函数的实现
+- **gui**: 图形界面模块，包含交互界面相关代码
+- **models**: 模型相关模块，包含模型保存、加载和管理相关功能
+- **networks**: 神经网络核心模块，包含网络的基本组件和操作
+- **trainers**: 训练器模块，包含反向传播和梯度计算相关功能
+- **utils**: 通用工具模块，包含打印和调试等辅助功能
 
+## 运行方式
+
+测试反向传播算法：
 ```bash
-python run_interactive.py
+python src/run_test.py
 ```
 
-### 训练模型
-
+测试模型保存和加载：
 ```bash
-python train_power_network.py --epochs 10 --learning-rate 0.01 --hidden-size 50
+python src/models/model_test.py
 ```
 
-参数说明：
-- `--epochs`: 训练轮数
-- `--batch-size`: 批处理大小
-- `--save-interval`: 保存间隔（轮）
-- `--learning-rate`: 学习率
-- `--hidden-size`: 隐藏层神经元数量
+## 技术栈
 
-## 系统功能
-
-1. **手写数字输入**：在画板上手写数字
-2. **数字识别**：点击"识别"按钮，系统将识别手写数字
-3. **反馈学习**：如果识别结果不正确，可以在文本框中输入正确结果，然后点击"提交正确结果"按钮
-4. **模型保存**：系统会在退出时自动保存模型，也可以通过添加保存按钮手动保存
-
-## 文件说明
-
-- `power_activation_network.py`: 幂激活神经网络模型实现
-- `mnist_gui_main.py`: 图形界面主程序
-- `train_power_network.py`: 模型训练脚本
-- `run_interactive.py`: 启动交互式界面的脚本
-
-## 实现原理
-
-该系统使用了一种创新的神经网络结构，采用多项式（幂函数）作为激活函数，而不是传统的ReLU或sigmoid函数。网络的前向传播过程包括：
-
-1. 线性变换：输入向量与权重矩阵相乘，加上偏置向量
-2. 幂激活：计算线性输出的1到max_power次幂，生成范德蒙德矩阵
-3. 输出层计算：对幂激活结果进行加权求和
-4. Softmax输出：将输出向量转换为概率分布
-
-网络的反向传播过程通过计算误差梯度来更新权重和偏置，使网络能够从用户反馈中学习。
-
-## 参考
-
-- 基于MNIST数据集的手写数字识别
-- 《深度学习入门-基于Python的理论与实现》 
+- NumPy: 用于矩阵运算和神经网络数值计算
+- PyQt5: 用于图形界面展示
+- PIL/Pillow: 用于图像处理 

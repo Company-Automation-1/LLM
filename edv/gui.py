@@ -3,18 +3,27 @@
 
 import sys
 import time
+import os
 import io
+import numpy as np
+
 from PIL import Image
 from PyQt5.QtWidgets import QMainWindow, QDesktopWidget, QApplication
 from PyQt5.QtGui import QColor
 from PyQt5.QtCore import QSize, QBuffer, QIODevice
+
+sys.path.append("..")
 from qt.layout import Ui_MainWindow
 from qt.paintboard import PaintBoard
-import numpy as np
-import os
-from my_custom_net import neural_network
 
-from src.util import pt
+#TODO##########################################
+from main_Lib_1 import power, vandermonde_matrix, diagonal_product, propagate, softmax, neural_network
+from main_Lib_2 import softplus, sigmoid
+from util import pt
+
+from traner_test import diff_vect_aweight, diff_vect_weight, diff_vect_bias, gradient
+
+#TODO##########################################
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -29,6 +38,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.weights = np.random.randn(self.output_size, self.input_size)
         self.activation_weights = np.random.randn(self.output_size, self.max_power)
         self.biases = np.random.randn(self.output_size, 1)
+
+        self.success = 0  # 预测的正确结果 one-hot
 
     def _init_ui(self):
         self._center_window()
@@ -63,6 +74,25 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def pbtPredict_Callback(self):
         """识别按钮回调函数"""
+
+        #TODO#####
+        weight_1 = np.ones((10,784))/2
+
+        weight_2 = np.ones((10,10))/2
+
+        biases_1 = np.ones((10,1))/2
+        biases_2 = np.ones((10,1))/2
+
+        activation_weight_1 = np.ones((10,2))/2
+        activation_weight_2 = np.ones((10,2))/2
+
+        weights = [weight_1, weight_2]
+        biases = [biases_1, biases_2]
+        activation_weights = [activation_weight_1, activation_weight_2]
+
+        pt('activation_weights', activation_weights)
+        #TODO#####
+
         img_array = self.save_paintboard_image()
         if img_array is None:
             self.lbCofidence_2.setText("")
@@ -72,30 +102,27 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         pt('图片归一化数组部分内容', x)
 
         # 神经网络前向推理
-        output = neural_network(x, self.weights, self.activation_weights, self.biases)  # (10, 1)
-        # print(output)
+        output, vectors, intermediate_vectors = neural_network(x, weights, activation_weights, biases, softplus, 1)
+        pt('output', output)
+        pt('vectors', vectors)
+        pt('intermediate_vectors', intermediate_vectors)
 
         # softmax概率分布
         probs = output.ravel()
-        # print(probs)
+        pt('probs', probs)
 
         # 预测类别
         pred = int(np.argmax(probs))
-        # print(pred)
+        pt('pred', pred)
 
         # 置信度（最大概率）
         confidence = float(np.max(probs))
         # print(confidence)
 
-        # 计算loss（用预测结果one-hot）
-        t = np.zeros_like(probs)
-        t[pred] = 1
-        loss = -np.sum(t * np.log(probs + 1e-7))
-        # print(loss)
+        self.success = output
         
         # 更新UI显示
         self.lbResult.setText(str(pred))
-        self.lbCofidence_2.setText(f"{loss:.6f}")
 
     def submit_correct_result(self):
         """提交正确结果按钮回调函数"""
@@ -103,9 +130,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         learning_rate = float(self.lineEdit_2.text())
 
         if correct_result:
-            print(f"用户提交的正确结果: {correct_result}")
-            print(f"学习率: {learning_rate}")
-            # 这里可以添加保存正确结果的逻辑
+            res = np.zeros((10,1))
+            res[int(correct_result)] = 1
+            pt("用户提交的正确结果", correct_result)
+            pt("one-hot正确结果", res)
+            pt("学习率", learning_rate)
+
+            # # 计算loss（用预测结果one-hot）
+            loss = np.sum((self.success - res) * (self.success - res))
+            print(loss)
+            
+            self.lbCofidence_2.setText(f"{loss:.6f}")
+
         else:
             print("请输入正确结果")
 

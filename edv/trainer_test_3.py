@@ -1,8 +1,6 @@
 import numpy as np
 from main_Lib_1 import power, vandermonde_matrix, diagonal_product, propagate, softmax, neural_network
 from main_Lib_2 import softplus, sigmoid
-# from trainer_test_1 import diff_vect_weight
-# from trainer_test_2 import diff_vect_aweight
 
 def diff_vect_bias(vectors, intermediate_vectors, weights, activation_weights, diff_activation, k, l, j):
    """

@@ -1,6 +1,6 @@
 import numpy as np
 from typing import Callable, List
-from util import pt
+from model_saver import load_model, save_model
 
 #TODO: 模板函数
 def power(value: np.ndarray, degree: int) -> np.ndarray:
@@ -79,8 +79,11 @@ def diagonal_product(matrix_1: np.ndarray, matrix_2: np.ndarray) -> np.ndarray:
     return result
 
 #TODO: Propagate函数
-def propagate(vector: np.ndarray, weights: np.ndarray, activation_weights: np.ndarray, 
-              biases: np.ndarray, activation_function: Callable[[np.ndarray, int], np.ndarray]) -> np.ndarray:
+def propagate(vector: np.ndarray, 
+              weights: np.ndarray, 
+              activation_weights: np.ndarray, 
+              biases: np.ndarray, 
+              activation_function: Callable[[np.ndarray, int], np.ndarray]) -> np.ndarray:
     """
     神经网络单层前向传播
     
@@ -112,7 +115,7 @@ def propagate(vector: np.ndarray, weights: np.ndarray, activation_weights: np.nd
     # 计算对角乘积，应用激活权重
     result = diagonal_product(activation_weights, activated_vector)
     
-    return result
+    return result, intermediate_vector
 
 #TODO: Softmax函数
 def softmax(x: np.ndarray, temperature: float = 1) -> np.ndarray:
@@ -136,13 +139,22 @@ def softmax(x: np.ndarray, temperature: float = 1) -> np.ndarray:
     exp_x = np.exp(scaled_x)
     return exp_x / np.sum(exp_x)  # 归一化
 
+#TODO: Softmax的微分
+def diff_softmax(vector: np.ndarray, diff_vector: np.ndarray, temperature: float = 1) -> np.ndarray:
+
+    y = softmax(vector, temperature)
+
+    output = (y * diff_vector - y * y / np.exp(vector / temperature) * (np.exp(vector / temperature).T @ diff_vector)) / temperature
+
+    return output
+    
 #TODO: 神经网络
-def neural_network(vector: np.ndarray, 
-                  weights: List[np.ndarray], 
-                  activation_weights: List[np.ndarray], 
-                  biases: List[np.ndarray], 
-                  activation_function: Callable[[np.ndarray, int], np.ndarray], 
-                  temperature: float) -> np.ndarray:
+def neural_network(vector: np.ndarray,
+                   weights: List[np.ndarray], 
+                   activation_weights: List[np.ndarray], 
+                   biases: List[np.ndarray], 
+                   activation_function: Callable[[np.ndarray, int], np.ndarray], 
+                   temperature: float) -> np.ndarray:
     """
     多层神经网络前向传播
     
@@ -165,22 +177,24 @@ def neural_network(vector: np.ndarray,
     """
     next_vector = vector
 
+    vectors = [vector]  # 保存中间向量
+    intermediate_vectors = []
+
     # 逐层前向传播
     for k in range(len(weights)):
-        pt('next_vector',next_vector)
-        pt('k',k)
-        pt('weights[k]',weights[k])
-        pt('activation_weights[k]',activation_weights[k])
-        pt('biases[k]',biases[k])
-        next_vector = propagate(
+
+        next_vector, intermediate_vector = propagate(
             next_vector, 
             weights[k],
             activation_weights[k], 
             biases[k],
             activation_function
         )
+
+        vectors.append(next_vector)
+        intermediate_vectors.append(intermediate_vector)
     
     # 应用softmax得到最终输出概率分布
     output_vector = softmax(next_vector, temperature)
     
-    return output_vector
+    return output_vector, vectors, intermediate_vectors
