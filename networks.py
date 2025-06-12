@@ -1,13 +1,13 @@
 import numpy as np
-import os
-import sys
 from typing import Callable, List
 
-# 添加项目根目录到Python路径
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+from model import load_model, save_model
 
-from src.models.model_io import load_model, save_model
+from util import pt
 
+E = 0
+
+#TODO: 模板函数
 def power(value: np.ndarray, degree: int) -> np.ndarray:
     """
     计算数组的幂次方
@@ -21,6 +21,7 @@ def power(value: np.ndarray, degree: int) -> np.ndarray:
     """
     return value ** degree  # 非0次幂返回幂次计算结果
 
+#TODO: 生成激活函数的范德蒙德矩阵
 def vandermonde_matrix(vector: np.ndarray, function: Callable[[np.ndarray, int], np.ndarray], degree: int) -> np.ndarray:
     """
     生成激活函数的范德蒙德矩阵
@@ -45,6 +46,7 @@ def vandermonde_matrix(vector: np.ndarray, function: Callable[[np.ndarray, int],
     
     return matrix.T  # 转置返回，使每行表示一个幂次
 
+#TODO: 计算两个矩阵的对角元素乘积
 def diagonal_product(matrix_1: np.ndarray, matrix_2: np.ndarray) -> np.ndarray:
     """
     计算两个矩阵的对角元素乘积
@@ -81,6 +83,7 @@ def diagonal_product(matrix_1: np.ndarray, matrix_2: np.ndarray) -> np.ndarray:
     
     return result
 
+#TODO: 神经网络单层前向传播
 def propagate(vector: np.ndarray, 
               weights: np.ndarray, 
               activation_weights: np.ndarray, 
@@ -116,9 +119,14 @@ def propagate(vector: np.ndarray,
 
     # 计算对角乘积，应用激活权重
     result = diagonal_product(activation_weights, activated_vector)
+
+    global E  # 声明E为全局变量
+    E += 1    # 自增E
+    pt('标题', E)
     
     return result, intermediate_vector
 
+#TODO: Softmax激活函数
 def softmax(x: np.ndarray, temperature: float = 1) -> np.ndarray:
     """
     Softmax激活函数
@@ -140,6 +148,7 @@ def softmax(x: np.ndarray, temperature: float = 1) -> np.ndarray:
     exp_x = np.exp(scaled_x)
     return exp_x / np.sum(exp_x)  # 归一化
 
+#TODO: Softmax的微分
 def diff_softmax(vector: np.ndarray, diff_vector: np.ndarray, temperature: float = 1) -> np.ndarray:
     """
     Softmax的微分
@@ -157,7 +166,8 @@ def diff_softmax(vector: np.ndarray, diff_vector: np.ndarray, temperature: float
     output = (y * diff_vector - y * y / np.exp(vector / temperature) * (np.exp(vector / temperature).T @ diff_vector)) / temperature
 
     return output
-    
+
+#TODO: 多层神经网络前向传播
 def neural_network(vector: np.ndarray,
                    weights: List[np.ndarray], 
                    activation_weights: List[np.ndarray], 

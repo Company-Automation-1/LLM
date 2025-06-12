@@ -2,6 +2,7 @@ import numpy as np
 import os
 import pickle
 
+#TODO: 保存神经网络模型参数到文件
 def save_model(model_params, filepath, format='pickle'):
     """
     保存神经网络模型参数到文件
@@ -28,6 +29,7 @@ def save_model(model_params, filepath, format='pickle'):
     
     print(f"模型已保存到: {filepath}")
 
+#TODO: 从文件加载神经网络模型参数
 def load_model(filepath, format='pickle'):
     """
     从文件加载神经网络模型参数
@@ -54,6 +56,7 @@ def load_model(filepath, format='pickle'):
     print(f"模型已从 {filepath} 加载")
     return model_params
 
+#TODO: 获取模型结构信息的简要描述
 def get_model_info(model_params):
     """
     获取模型结构信息的简要描述

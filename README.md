@@ -2,51 +2,43 @@
 
 ## 项目结构
 
-项目已按功能模块重新组织，目录结构如下：
-
 ```
-src/
-├── activations/              # 激活函数相关模块
-│   ├── activation_functions.py  # 包含softplus和sigmoid等激活函数
-│   └── __init__.py
-├── gui/                      # 图形界面相关模块
-│   └── main.py               # GUI主程序
-├── models/                   # 模型保存和加载相关模块
-│   ├── model_io.py           # 模型IO操作函数
-│   ├── model_test.py         # 模型测试函数
-│   └── __init__.py
-├── networks/                 # 神经网络核心功能模块
-│   ├── core.py               # 网络核心函数
-│   └── __init__.py
-├── trainers/                 # 训练器相关模块
-│   ├── backprop.py           # 反向传播实现
-│   └── __init__.py
-├── utils/                    # 通用工具函数
-│   ├── print_utils.py        # 打印工具函数
-│   └── __init__.py
-├── run_test.py               # 测试运行脚本
-└── __init__.py
+LLM/
+├── activations.py           # 激活函数实现，如softplus和sigmoid等
+├── main.py                  # 主程序入口和GUI实现
+├── model.py                 # 模型保存和加载功能
+├── networks.py              # 神经网络核心功能实现
+├── run_test.py              # 测试运行脚本
+├── trainers.py              # 训练相关功能，包含反向传播和梯度计算
+├── util.py                  # 通用工具函数
+├── qt/                      # Qt图形界面相关组件
+│   ├── layout.py            # 界面布局
+│   ├── layout.ui            # 界面设计文件
+│   └── paintboard.py        # 画板实现
+├── mnist/                   # MNIST参考项目
+└── dataset/                 # MNIST数据集
 ```
 
 ## 模块说明
 
-- **activations**: 激活函数模块，包含各种激活函数的实现
-- **gui**: 图形界面模块，包含交互界面相关代码
-- **models**: 模型相关模块，包含模型保存、加载和管理相关功能
-- **networks**: 神经网络核心模块，包含网络的基本组件和操作
-- **trainers**: 训练器模块，包含反向传播和梯度计算相关功能
-- **utils**: 通用工具模块，包含打印和调试等辅助功能
+- **activations.py**: 激活函数模块，包含softplus和sigmoid等激活函数的实现
+- **main.py**: 主程序入口，包含GUI界面实现和神经网络应用
+- **model.py**: 模型管理模块，包含模型保存、加载和信息获取功能
+- **networks.py**: 神经网络核心模块，包含网络的基本组件和前向传播
+- **trainers.py**: 训练器模块，包含反向传播和梯度计算相关功能
+- **util.py**: 通用工具模块，包含辅助功能
+- **qt/**: Qt图形界面组件，包含界面布局和画板实现
 
 ## 运行方式
 
-测试反向传播算法：
+启动主程序（包含GUI界面）：
 ```bash
-python src/run_test.py
+python main.py
 ```
 
-测试模型保存和加载：
+运行测试：
 ```bash
-python src/models/model_test.py
+python run_test.py
 ```
 
 ## 技术栈

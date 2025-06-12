@@ -11,7 +11,7 @@ def softplus(value, dummy):
     返回:
     - softplus激活后的值
     """
-    return np.log(1 + np.exp(value)) * dummy
+    return np.log1p(np.exp(value)) * dummy
 
 def sigmoid(value, dummy):
     """

@@ -1,14 +1,10 @@
 import numpy as np
 import copy
-import os
-import sys
 
-# 添加项目根目录到Python路径
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+from networks import power, vandermonde_matrix, diagonal_product, propagate, softmax, neural_network, diff_softmax
+from activations import softplus, sigmoid
 
-from src.networks.core import power, vandermonde_matrix, diagonal_product, propagate, softmax, neural_network, diff_softmax
-from src.activations.activation_functions import softplus, sigmoid
-
+#TODO: 权重梯度的反向传播
 def diff_vect_weight(vectors, intermediate_vectors, weights, activation_weights, diff_activation, k, l, i, j):
    """
    计算神经网络中权重梯度的反向传播
@@ -93,6 +89,7 @@ def diff_vect_weight(vectors, intermediate_vectors, weights, activation_weights,
 
    return output
 
+#TODO: 激活权重梯度的反向传播
 def diff_vect_aweight(vectors, intermediate_vectors, weights, activation_weights, activation_function, diff_activation, k, l, i, j):
    """
    计算神经网络中激活权重梯度的反向传播
@@ -189,6 +186,7 @@ def diff_vect_aweight(vectors, intermediate_vectors, weights, activation_weights
 
    return output
 
+#TODO: 偏置梯度的反向传播
 def diff_vect_bias(vectors, intermediate_vectors, weights, activation_weights, diff_activation, k, l, j):
    """
    计算神经网络中偏置梯度的反向传播
@@ -378,8 +376,9 @@ def gradient(vectors,
          ))
 
   # 返回所有梯度
-  return {
-     "back_weights" : back_weights,
-     "back_act_weights" : back_act_weights,
-     "back_biases" : back_biases
-  } 
+  return back_weights, back_act_weights, back_biases
+#   return {
+#      "back_weights" : back_weights,
+#      "back_act_weights" : back_act_weights,
+#      "back_biases" : back_biases
+#   } 

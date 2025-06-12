@@ -6,10 +6,10 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # 现在导入相对于项目根目录的模块
-from src.networks.core import power, vandermonde_matrix, diagonal_product, propagate, softmax, neural_network
-from src.activations.activation_functions import softplus, sigmoid
-from src.utils.print_utils import pt
-from src.trainers.backprop import diff_vect_aweight, diff_vect_weight, diff_vect_bias, gradient
+from networks import power, vandermonde_matrix, diagonal_product, propagate, softmax, neural_network
+from activations import softplus, sigmoid
+from util import pt
+from trainers import diff_vect_aweight, diff_vect_weight, diff_vect_bias, gradient
 
 def test():
     """
